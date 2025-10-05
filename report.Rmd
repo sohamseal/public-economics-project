@@ -1,0 +1,241 @@
+---
+title: "A Statistical Overview of India's Public Finance"
+author: "Soham Seal \n Jadavpur University \n Department of Economics \n Roll no. - 002300301079"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: TRUE
+    toc_depth: 5
+    number_sections: false
+    fig_width: 7
+    fig_height: 5
+    fig_caption: true
+header-includes:
+  - \usepackage{placeins}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{float}
+  - \usepackage{pdflscape}
+  - \usepackage{fontspec}
+  - \usepackage{unicode-math}
+  - \setmainfont{Times New Roman}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, fig.align = 'center')
+library(knitr)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(here)
+library(stargazer)
+library(broom)
+library(ggthemes)
+library(tidyr)
+library(stringr)
+
+```
+
+# Introduction
+
+The study of public economics is fundamentally grounded in understanding the scale, scope, and function of the government within an economy. As highlighted by Hindriks and Miles in "Public Sector Statistics," a statistical overview provides the essential empirical foundation upon which theoretical models and policy analyses are built. This report undertakes a practical application of this principle by replicating the core statistical analyses presented in their work, substituting the historical data of developed nations with contemporary data from the Indian economy for the fiscal year 2022-2023.
+
+The objective of this exercise is twofold. First, it is to construct a detailed statistical portrait of the Indian public sector, offering a clear perspective on its size, priorities, and fiscal health. Second, it is to demonstrate how the standardized frameworks used in public economics can be applied to diverse economic contexts to yield valuable insights.
+
+Following the logical structure of the Hindriks and Miles chapter, this report is organized into three distinct parts:
+
+**Part 1: Government Expenditure:** This section begins with a historical overview of the growth of the Indian public sector, measured by total expenditure as a percentage of GDP. It then dis-aggregates this expenditure to analyze its composition, both by function (e.g., defense, health, education) and by the level of government responsible for spending (Central vs. State).
+
+**Part 2: Government Revenue:** The analysis then shifts to the sources of government funding. This part traces the historical growth of India's tax base and provides a detailed breakdown of current revenues by major tax instrument (e.g., taxes on goods and services, income taxes) and by the level of government responsible for tax collection.
+
+**Part 3: Government Debt:** The final section examines the consequences of imbalances between expenditure and revenue. It analyzes the recent trajectory of India's fiscal deficit and the resulting stock of accumulated government debt, providing key indicators of the nation's fiscal sustainability.
+
+By the end of this report, we will have created a comprehensive and data-driven overview of the Indian public sector, providing a robust empirical basis for further study in public economics.
+
+------------------------------------------------------------------------
+
+## Part 1: Government Expenditure
+
+### **Graph 1: The Historical Growth of the Public Sector**
+
+*(Based on Hindriks & Miles, Fig. 4.1 & 4.2)*
+
+**Description & Purpose:** This graph is the starting point of our analysis. Its purpose is to show the "big picture" of the government's role in the economy over time. It answers the fundamental question: has the state's economic footprint grown or shrunk over the last few decades?
+
+**Interpretation:** This graph illustrates the evolution of the size of the government relative to the national economy. The historical trend shows a steady increase since the early 2000s with a significant spike in recent years. This growth can be partly explained by Wagner’s Law, which posits that the demand for public services like education, infrastructure, and health naturally increases as a country’s national income rises. The trajectory also reflects major policy shifts and responses to economic events, such as increased stimulus spending during downturns.
+
+```{r graph-1-historical-growth, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="The Historical Growth of the Public Sector", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph1.png")
+```
+
+### **Graph 2: Historical Trends in Key Expenditure Categories**
+
+*(Based on Hindriks & Miles, Fig. 4.3)*
+
+**Description & Purpose:** This graph digs deeper into the "why" behind the overall growth seen in Graph 1. It compares spending on core state functions (like Defense) with social spending (like Health and Education) to reveal long-term shifts in government policy priorities.
+
+**Interpretation:** This series of graphs dis-aggregates the overall growth in spending to reveal the long-term shifts in government priorities. The data for India reveals a significant and sustained rise in social spending. Expenditure on categories like Social services and Education has risen over the years and expenditure on health has fallen over the years. This reflects a clear policy focus on developing human capital but contracting the social safety net by lagging in key ares like Health and Defense. These conflicting trends illustrate the critical situation of the Indian state, with a diminishing emphasis on welfare and development but still with hope.
+
+##### **Defence Expenditure**
+
+```{r graph-2-historical-trends-defence, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Historical Trend in Defence Expenditure", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph2_defence.png")
+```
+
+##### **Subsidies Expenditure**
+
+```{r graph-2-historical-trends-subsidies, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Historical Trend in Subsidies Expenditure", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph2_subsidies.png")
+```
+
+##### **Education Expenditure**
+
+```{r graph-2-historical-trends-education, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Historical Trend in Education Expenditure", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph2_education.png")
+```
+
+##### **Health Expenditure**
+
+```{r graph-2-historical-trends-health, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Historical Trend in Health Expenditure", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph2_health.png")
+```
+
+##### **Social Services Expenditure**
+
+```{r graph-2-historical-trends-social-services, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Historical Trend in Social Services Expenditure", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph2_social_services.png")
+```
+
+##### **Economic Services Expenditure**
+
+```{r graph-2-historical-trends-economic-services, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Historical Trend in Economic Services Expenditure", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph2_economic_services.png")
+```
+
+### **Graph 3: Expenditure by Level of Government**
+
+*(Based on Hindriks & Miles, Fig. 4.5)*
+
+**Description & Purpose:** This chart explains the concept of fiscal federalism from a spending perspective. Its purpose is to show which level of government---Central or State---is primarily responsible for the final delivery of public services to citizens.
+
+**Interpretation:** This chart illustrates the decentralization of public spending in India’s federal system. The State governments are responsible for a large share of public expenditure, while the Central government directly accounts for the rest. This is a crucial finding: it highlights that many of the most critical public services for citizens, such as health, education, and local infrastructure, are delivered at the sub-national level. This significant spending responsibility at the state level necessitates the large-scale fiscal transfers from the Center, which, as we will see, is the primary revenue collector.
+
+```{r graph-3-expenditure-by-level, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Expenditure by Level of Government", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph3.png")
+```
+
+### **Graph 4: Composition of General Government Spending**
+
+*(Based on Hindriks & Miles, Fig. 4.6)*
+
+**Description & Purpose:** This graph provides a snapshot of the nation's total spending priorities for the most recent year. It combines the spending of the Center and States to show how the entire public sector, as a whole, allocates its funds across different functions.
+
+**Interpretation:** This chart provides a comprehensive snapshot of the nation’s spending priorities. In recent years, the largest share of consolidated public spending was dedicated to Social Services(sectors like Education and Health) and Economic Services. A significant portion of the budget is allocated to "Interest Payments," which represents a non-discretionary expenditure that constrains spending in other areas. Substantial allocations to "Health" and "Education" underscore the national commitment to human capital development. This functional breakdown is essential for understanding the trade-offs inherent in fiscal policy.
+
+```{r graph-4-composition-of-spending, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Composition of General Government Spending", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph4.png")
+```
+
+### **Graph 5: Functional Composition of Spending - A Two-Level View**
+
+*(Based on Hindriks & Miles, Fig. 4.7 & 4.8)*
+
+**Description & Purpose:** This visualization breaks down the previous graph to show that the Central and State governments have very different spending priorities. It demonstrates the concept of functional specialization within a federal system.
+
+**Interpretation:** This series of charts reveals that different levels of government specialize in providing different types of public services. The Central government’s budget is dominated by functions of national importance, with "Defence" and large-scale "Commercial Protection" schemes like Subsidies being prominent examples while sharing functions like 'Education". In contrast, State governments are the primary spenders on human capital, dedicating a large portion of their budgets to "Social Services" which includes "Education" and "Health". Along with this, "Economic Services" are also looked upon by state governments. This functional specialization is a defining feature of India’s fiscal federalism, where national responsibilities are handled centrally and citizen-facing services are managed at the state level.
+
+##### **Central Government Spending**
+
+```{r graph-5a-two-level-spending, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Functional Composition of Spending - Central Government", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph5a.png")
+```
+
+##### **State Government Spending**
+
+```{r graph-5b-two-level-spending, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Functional Composition of Spending - State Government", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph5b.png")
+```
+
+## Part 2: Government Revenue
+
+### **Graph 6: Historical Growth of Tax Revenue**
+
+*(Based on Hindriks & Miles, Fig. 4.10)*
+
+**Description & Purpose:** This chart shows how the government's ability to raise revenue has evolved over time. The tax-to-GDP ratio is a key measure of a state's fiscal capacity.
+
+**Interpretation:** This chart shows the historical ability of the government to generate revenue from the economy. India’s tax-to-GDP ratio has shown a steady increase over the years. The trend over time reflects the impact of tax reforms, economic growth, and the formalization of the economy. A rising ratio indicates an increasing fiscal capacity of the state to fund public services and investments.
+
+```{r graph-6-historical-tax-revenue, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Historical Growth of Tax Revenue", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph6.png")
+```
+
+### **Graph 7: Tax Sources at Each Level of Government**
+
+*(Based on Hindriks & Miles, Fig. 4.14)*
+
+**Description & Purpose:** This graph shows that not only do different levels of government collect different amounts of tax, but they also rely on different types of taxes, as assigned by the constitution.
+
+**Interpretation:** This visualization shows that different levels of government rely on different tax bases. The Central government’s revenue is dominated by direct taxes like Corporate Tax and Personal Income Tax, whereas other indirect taxes which includes central components of GST also constitutes a significant portion. In contrast, State governments rely more heavily on their own consumption taxes and indirect taxes such sales tax and excise duties which constitute SGST and taxes on fuel and liquor and so on. This constitutional allocation of taxing powers shapes the incentives and revenue potential of each level of government.
+
+```{r graph-7-tax-sources-by-level, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Tax Sources at Each Level of Government", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph7.png")
+```
+
+## Part 3: Government Debt
+
+### **Graph 8: The Budget Deficit Path**
+
+*(Based on Hindriks & Miles, Fig. 4.18)*
+
+**Description & Purpose:** This graph shows the government's annual budget balance. A deficit occurs when expenditure exceeds revenue in a given year. It represents the "flow" of new borrowing required, which adds to the national debt. This chart tracks the path of fiscal policy over time, showing periods of fiscal tightening or stimulus.
+
+**How to Plot:** - **Chart Type:** A simple Line Chart. - **X-Axis (Horizontal):** This will be "Year". - **Y-Axis (Vertical):** "Fiscal Deficit as a % of GDP". Note that deficits are often shown as positive numbers, but you can also plot them as negative to represent a shortfall. Be consistent. - **Data:** Plot the time-series data provided by the agent (a list of years and a list of corresponding deficit percentages).
+
+**Interpretation:** When the level of government expenditure exceeds the value of revenue, the budget is in deficit. This deficit must be financed by issuing debt. The fiscal deficit, measured as a percentage of GDP, represents the government’s annual borrowing requirement and is a key indicator of the “flow” of new debt being added each year. The chart shows the trajectory of fiscal policy in India, revealing periods of fiscal consolidation and expansion. In recent years, the deficit has shown a significant increase, especially after the economic crisis due to Covid. Persistently high deficits are the direct cause of a growing public debt burden.
+
+```{r graph-8-budget-deficit, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="The Budget Deficit Path", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph8.png")
+```
+
+### **Graph 9: Decomposition of National Debt**
+
+*(Based on Hindriks & Miles, Fig. 4.20, & 4.21)*
+
+**Description & Purpose:** This crucial visualization provides context. It acknowledges that government debt is just one part of the total debt in an economy. By comparing public debt with household debt and private sector debt, it gives a holistic view of the overall leverage and potential financial risks in the nation.
+
+**How to Plot:** - **Chart Type:** A simple Bar Chart. - **X-Axis (Horizontal):** This will have three categories: "Government Debt", "Private Sector Debt" and "Household Debt." - **Y-Axis (Vertical):** "Debt as a % of GDP". - **Data:** You will plot three separate bars. The agent will provide the final calculated percentage for each of the three categories for the latest year.
+
+**Interpretation:** High and rising debt is a source of justifiable concern, and it is not limited to the government. This chart provides a holistic view of leverage across the entire economy by comparing the stock of debt held by the government, private sector (domestic only) and households. For the latest year, both government debt and household debt have shown a significant increase. While the government’s debt is significant, understanding its size relative to private sector debt is crucial for assessing macroeconomic stability. The accumulation of debt across all these sectors contributed to the overall financial landscape and potential systemic risks.
+
+##### **Government Debt**
+
+```{r graph-9a-debt-decomposition, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Decomposition of National Debt - Government", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph9_public.png")
+```
+
+##### **Private Sector Debt**
+```{r graph-9b-debt-decomposition, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Decomposition of National Debt - Private Sector", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph9_private_sector.png")
+```
+
+##### **Household Debt**
+
+```{r graph-9c-debt-decomposition, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Decomposition of National Debt - Household", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph9_household.png")
+```
+
+### **Graph 10: The Trajectory of Government Debt**
+
+*(Based on Hindriks & Miles, Fig. 4.22)*
+
+**Description & Purpose:** This is the culminating graph of the report. It shows the "stock" of total government debt accumulated from all past deficits. The debt-to-GDP ratio is the single most important indicator of a country's long-term fiscal health and its ability to sustain its financial obligations.
+
+**How to Plot:** - **Chart Type:** A Line Chart. - **X-Axis (Horizontal):** "Year". - **Y-Axis (Vertical):** "General Government Debt as a % of GDP". - **Data:** Plot the time-series data provided by the agent (a list of years and a list of corresponding debt-to-GDP ratios).
+
+**Interpretation:** This final chart illustrates the outcome of the accumulated annual deficits shown previously. The stock of general government debt relative to the size of the economy is a key indicator of a nation’s fiscal sustainability. The ratio has evolved over the years, with a sharp increase in this trajectory in recent years. This is a direct consequence of the significant deficits incurred during the fiscal response to economic crises. This rising debt stock places a burden on public finances through higher interest payments and highlights the long-term challenge of fiscal consolidation that lies ahead.
+
+```{r graph-10-debt-trajectory, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="The Trajectory of Government Debt", out.width="85%", fig.pos='H'}
+knitr::include_graphics("./diagrams/graph10.png")
+```
